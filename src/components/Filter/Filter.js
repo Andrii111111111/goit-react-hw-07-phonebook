@@ -1,7 +1,16 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { CenteredContainer, Label, Input } from './Filter.style';
+import { useDispatch } from 'react-redux';
+import { changeFilter } from '../../redux/filterSlice';
 
-export const Filter = ({ input }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const handleFilterChange = e => {
+    dispatch(changeFilter(e.target.value));
+  };
+
   return (
     <CenteredContainer>
       <Label htmlFor="name">Find contacts by name</Label>
@@ -9,7 +18,7 @@ export const Filter = ({ input }) => {
         type="text"
         id="name"
         name="name"
-        onChange={input}
+        onChange={handleFilterChange}
         placeholder="Name"
       />
     </CenteredContainer>
@@ -17,5 +26,5 @@ export const Filter = ({ input }) => {
 };
 
 Filter.propTypes = {
-  input: PropTypes.func,
+  onFilterChange: PropTypes.func,
 };

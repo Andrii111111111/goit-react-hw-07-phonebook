@@ -1,31 +1,15 @@
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { Form, Label, Input, Button } from './ContactForm.style';
 import { addContact, fetchContacts } from '../../redux/operations';
 
-export const submit = async (evt, dispatch) => {
-  const formReset = () => {
-    evt.target.name.value = '';
-    evt.target.querySelector('input[type="tel"]').value = '';
-  };
+export const ContactForm = () => {
+  const dispatch = useDispatch();
 
-  await dispatch(
-    addContact({
-      name: evt.target.name.value,
-      number: evt.target.querySelector('input[type="tel"]').value,
-    })
-  );
-
-  await dispatch(fetchContacts());
-
-  await formReset();
-};
-
-export const ContactForm = ({ formSubmit }) => {
   const handleNameChange = e => {
     const input = e.target.value.replace(/[^a-zA-Zа-яА-Я\s'-]/g, '');
-
     const formattedInput = input.replace(/['\s-]+/g, ' ');
-
     e.target.value = formattedInput.trim();
   };
 
@@ -54,7 +38,7 @@ export const ContactForm = ({ formSubmit }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    formSubmit(e);
+    submit(e, dispatch);
   };
 
   return (
@@ -86,4 +70,22 @@ export const ContactForm = ({ formSubmit }) => {
 
 ContactForm.propTypes = {
   formSubmit: PropTypes.func,
+};
+
+const submit = async (evt, dispatch) => {
+  const formReset = () => {
+    evt.target.name.value = '';
+    evt.target.querySelector('input[type="tel"]').value = '';
+  };
+
+  await dispatch(
+    addContact({
+      name: evt.target.name.value,
+      number: evt.target.querySelector('input[type="tel"]').value,
+    })
+  );
+
+  await dispatch(fetchContacts());
+
+  await formReset();
 };
